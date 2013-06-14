@@ -9,7 +9,9 @@ describe Grocer::Pushpackager::Package do
       allowedDomains: ["http://domain.example.com"],
       urlFormatString: "http://domain.example.com/%@/?flight=%@",
       webServiceURL: "https://example.com/push",
-      iconSet: { } 
+      iconSet: { },
+      certificate: '',
+      key: ''
     })
     expect{package.valid?}.to raise_error ArgumentError
     package.authentication_token = "19f8d7a6e9fb8a7f6d9330dabe"
@@ -17,6 +19,10 @@ describe Grocer::Pushpackager::Package do
   end
 
   context "complete, valid package" do
+    before :all do
+      @pair = test_ssl_pair
+    end
+
     subject do
       Grocer::Pushpackager::Package.new({
       websiteName: "Bay Airlines",
@@ -25,6 +31,8 @@ describe Grocer::Pushpackager::Package do
       urlFormatString: "http://domain.example.com/%@/?flight=%@",
       authenticationToken: "19f8d7a6e9fb8a7f6d9330dabe",
       webServiceURL: "https://example.com/push",
+      certificate: @pair[:certificate],
+      key: @pair[:key],
       iconSet: {
         :'16x16' => test_icon,
         :'16x16@2x' => test_icon,

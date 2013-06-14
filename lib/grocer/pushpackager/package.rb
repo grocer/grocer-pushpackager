@@ -1,16 +1,19 @@
 require 'zip/zip'
 require 'digest/sha1'
+require 'openssl'
 require_relative 'icon_set'
 require_relative 'website'
 
 module Grocer
   module Pushpackager
     class Package
-      attr_reader :icon_set, :website
+      attr_accessor :key, :certificate, :icon_set, :website
 
       def initialize(config = {})
         @icon_set = IconSet.new(config)
         @website = Website.new(config)
+        @certificate = config[:certificate]
+        @key = config[:key]
       end
 
       def authentication_token= value
@@ -23,9 +26,13 @@ module Grocer
       def valid?
         @icon_set.valid?
         @website.valid?
+        raise ArgumentError, "Missing private key" unless @key
+        raise ArgumentError, "Missing certificate" unless @certificate
+        true
       end
 
       def file
+        raise unless self.valid?
         package = Tempfile.new('package')
         package.write(build_zip.string)
         package.close
@@ -54,7 +61,7 @@ module Grocer
 
       def signature
         return @signature if @signature
-        @signature = ""
+        @signature = OpenSSL::PKCS7::sign(@certificate, @key, manifest_json, [], OpenSSL::PKCS7::DETACHED)
       end
 
       def build_zip
@@ -68,7 +75,7 @@ module Grocer
           out.put_next_entry('manifest.json')
           out.write manifest_json
           out.put_next_entry('signature')
-          out.write signature
+          out.write signature.to_der
         end
         buffer
       end

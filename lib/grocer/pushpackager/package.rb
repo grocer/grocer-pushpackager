@@ -39,6 +39,11 @@ module Grocer
         package
       end
 
+      def buffer
+        raise unless self.valid?
+        build_zip.string
+      end
+
       private
       def website_json
         @website_json ||= @website.to_json

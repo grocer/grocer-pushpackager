@@ -1,4 +1,4 @@
-require 'zip/zip'
+require 'zip'
 require 'digest/sha1'
 require 'openssl'
 require_relative 'icon_set'
@@ -70,7 +70,7 @@ module Grocer
       end
 
       def build_zip
-        buffer = Zip::ZipOutputStream.write_buffer do |out|
+        buffer = Zip::OutputStream.write_buffer do |out|
           @icon_set.each do |icon|
             out.put_next_entry("icon.iconset/#{icon.name}")
             out.write icon.contents

@@ -33,7 +33,7 @@ builder = Grocer::Pushpackager::Package.new({
     authenticationToken: "19f8d7a6e9fb8a7f6d9330dabe",
     webServiceURL: "https://example.com/push",
     certificate: p12.certificate,
-    key: p12.certificate,
+    key: p12.key,
     iconSet: {
       :'16x16' => File.open('icon.png'),
       :'16x16@2x' => File.open('icon.png'),

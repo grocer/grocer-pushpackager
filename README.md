@@ -1,8 +1,9 @@
 # Grocer::Pushpackager
-[![Build Status](https://secure.travis-ci.org/grocer/grocer-pushpackager.png)](http://travis-ci.org/grocer/grocer-pushpackager)
-[![Gem Version](https://badge.fury.io/rb/grocer-pushpackager.png)](http://badge.fury.io/rb/grocer-pushpackager)
-[![Code Climate](https://codeclimate.com/github/grocer/grocer-pushpackager.png)](https://codeclimate.com/github/grocer/grocer-pushpackager)
-[![Coverage Status](https://coveralls.io/repos/grocer/grocer-pushpackager/badge.png?branch=master)](https://coveralls.io/r/grocer/grocer-pushpackager)
+[![Build Status](https://travis-ci.org/grocer/grocer-pushpackager.svg?branch=master)](http://travis-ci.org/grocer/grocer-pushpackager)
+[![Gem Version](https://badge.fury.io/rb/grocer-pushpackager.svg)](http://badge.fury.io/rb/grocer-pushpackager)
+[![Code Climate](https://codeclimate.com/github/grocer/grocer-pushpackager/badges/gpa.svg)](https://codeclimate.com/github/grocer/grocer-pushpackager)
+[![Coverage Status](https://coveralls.io/repos/grocer/grocer-pushpackager/badge.svg?branch=master)](https://coveralls.io/r/grocer/grocer-pushpackager)
+
 [Documentation](http://rubydoc.info/gems/grocer-pushpackager/)
 
 Builds a PushPackage for Apple's APN for use with Safari/Mavericks

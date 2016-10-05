@@ -65,8 +65,14 @@ module Grocer
       end
 
       def signature
-        return @signature if @signature
-        @signature = OpenSSL::PKCS7::sign(@certificate, @key, manifest_json, [], OpenSSL::PKCS7::DETACHED)
+        @signature ||= OpenSSL::PKCS7::sign(@certificate, @key, manifest_json, intermediate_certificates, OpenSSL::PKCS7::DETACHED)
+      end
+
+      def intermediate_certificates
+        path = File.expand_path("../../../../certificates/AppleWWDRCA.cer", __FILE__)
+        data = File.read(path)
+        certificate = OpenSSL::X509::Certificate.new(data)
+        [certificate]
       end
 
       def build_zip

@@ -24,14 +24,8 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-test_icon = File.open('icon.png')
-@pair = {
-    key: OpenSSL::PKey::RSA.new(File.read('rsa.pem'), 'my pass phrase'),
-    certificate: OpenSSL::X509::Certificate.new(File.read('apple-dev.cer'))
-}
-```
+p12 = OpenSSL::PKCS12.new(File.read('certificate.p12'), 'PASSWORD')
 
-```ruby
 builder = Grocer::Pushpackager::Package.new({
     websiteName: "Bay Airlines",
     websitePushID: "web.com.example.domain",
@@ -39,20 +33,28 @@ builder = Grocer::Pushpackager::Package.new({
     urlFormatString: "http://domain.example.com/%@/?flight=%@",
     authenticationToken: "19f8d7a6e9fb8a7f6d9330dabe",
     webServiceURL: "https://example.com/push",
-    certificate: @pair[:certificate],
-    key: @pair[:key],
+    certificate: p12.certificate,
+    key: p12.key,
     iconSet: {
-      :'16x16' => test_icon,
-      :'16x16@2x' => test_icon,
-      :'32x32' => test_icon,
-      :'32x32@2x' => test_icon,
-      :'128x128' => test_icon,
-      :'128x128@2x' => test_icon
+      :'16x16' => File.open('icon.png'),
+      :'16x16@2x' => File.open('icon.png'),
+      :'32x32' => File.open('icon.png'),
+      :'32x32@2x' => File.open('icon.png'),
+      :'128x128' => File.open('icon.png'),
+      :'128x128@2x' => File.open('icon.png')
     }
 })
 builder.file # A closed Tempfile that can be read
 builder.buffer # A string buffer that can be streamed out to a client
 ```
+
+## Obtaining a Certificate
+
+1. Visit the [Website Push IDs](https://developer.apple.com/account/ios/identifiers/websitePushId/websitePushIdList.action) page under Identifiers in the Developer Center.
+2. Create a new ID.
+3. Download the new certificate in the Certificates section.
+4. Open the certificate in Keychain Access
+5. Right click on the certificate and choose export. Select the p12 option.
 
 ## Contributing
 

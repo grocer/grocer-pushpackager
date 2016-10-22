@@ -13,6 +13,7 @@ module Grocer
         @icon_set = IconSet.new(config)
         @website = Website.new(config)
         @certificate = config[:certificate]
+        @additional_certs = config[:additional_certs] || []
         @key = config[:key]
       end
 
@@ -66,7 +67,7 @@ module Grocer
 
       def signature
         return @signature if @signature
-        @signature = OpenSSL::PKCS7::sign(@certificate, @key, manifest_json, [], OpenSSL::PKCS7::DETACHED)
+        @signature = OpenSSL::PKCS7::sign(@certificate, @key, manifest_json, @additional_certs, OpenSSL::PKCS7::DETACHED)
       end
 
       def build_zip

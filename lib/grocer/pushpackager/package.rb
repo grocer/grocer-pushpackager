@@ -1,4 +1,4 @@
-require 'zip/zip'
+require 'zip'
 require 'digest/sha1'
 require 'openssl'
 require_relative 'icon_set'
@@ -65,12 +65,18 @@ module Grocer
       end
 
       def signature
-        return @signature if @signature
-        @signature = OpenSSL::PKCS7::sign(@certificate, @key, manifest_json, [], OpenSSL::PKCS7::DETACHED)
+        @signature ||= OpenSSL::PKCS7::sign(@certificate, @key, manifest_json, intermediate_certificates, OpenSSL::PKCS7::DETACHED)
+      end
+
+      def intermediate_certificates
+        path = File.expand_path("../../../../certificates/AppleWWDRCA.cer", __FILE__)
+        data = File.read(path)
+        certificate = OpenSSL::X509::Certificate.new(data)
+        [certificate]
       end
 
       def build_zip
-        buffer = Zip::ZipOutputStream.write_buffer do |out|
+        buffer = Zip::OutputStream.write_buffer do |out|
           @icon_set.each do |icon|
             out.put_next_entry("icon.iconset/#{icon.name}")
             out.write icon.contents
